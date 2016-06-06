@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
 #include "Input.h"
-#include "Ball.h"
+#include "Planet.h"
 
 using namespace std;
 using namespace sf;
 
 void eventRunner(RenderWindow& window, bool& gameRunning);
-void draw(RenderWindow& window, Ball& ball);
+void draw(RenderWindow& window, Planet& ball);
 
 int main() 
 {
 	RenderWindow window(VideoMode(1280, 720), "Space... And Stuff!");
-	
-	Ball ball;
+	//RenderWindow window(VideoMode(1920, 1080), "Space... And Stuff!", sf::Style::Fullscreen);
+
+	Planet ball(window, 50);
 
 	bool gameRunning = true;
 
@@ -21,15 +22,10 @@ int main()
 	{
 		eventRunner(window, gameRunning);
 
-		ball.move();
+		ball.update(window);
 		
 		draw(window, ball);
-		
-		Vector2i temp = Input::getInstance().getMousePosition();
-		printf("%d %d\n", temp.x, temp.y);
 	}
-
-
 	return 0;
 }
 
@@ -48,14 +44,13 @@ void eventRunner(RenderWindow& window, bool& gameRunning)
 			break;
 		case Event::KeyPressed:
 			Input::getInstance().registerKeyDown(evt.key.code);
-			printf("button pressed!\n");
+			printf("button %d pressed!\n", evt.key.code);
 			break;
 		case Event::KeyReleased:
 			Input::getInstance().registerKeyUp(evt.key.code);
-			printf("button released!\n");
+			printf("button %d released!\n", evt.key.code);
 			break;
 		case Event::MouseMoved:
-			//Vector2f mousePosition(evt.mouseMove.x, evt.mouseMove.y);
 			Input::getInstance().setMousePosition(Vector2i(evt.mouseMove.x, evt.mouseMove.y));
 			break;
 		default:
@@ -64,7 +59,7 @@ void eventRunner(RenderWindow& window, bool& gameRunning)
 	}
 }
 
-void draw(RenderWindow& window, Ball& ball)
+void draw(RenderWindow& window, Planet& ball)
 {
 	window.clear();
 
