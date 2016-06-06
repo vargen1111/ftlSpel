@@ -25,6 +25,8 @@ int main()
 		
 		draw(window, ball);
 		
+		Vector2i temp = Input::getInstance().getMousePosition();
+		printf("%d %d\n", temp.x, temp.y);
 	}
 
 
@@ -36,21 +38,28 @@ void eventRunner(RenderWindow& window, bool& gameRunning)
 	Event evt;
 	while (window.pollEvent(evt))
 	{
-		if (evt.type == Event::Closed)
+		switch (evt.type)
+		{
+		case Event::Closed:
 		{
 			window.close();
 			gameRunning = false;
 		}
-
-		if (evt.type == Event::KeyPressed)
-		{
+			break;
+		case Event::KeyPressed:
 			Input::getInstance().registerKeyDown(evt.key.code);
 			printf("button pressed!\n");
-		}
-		else if (evt.type == Event::KeyReleased)
-		{
+			break;
+		case Event::KeyReleased:
 			Input::getInstance().registerKeyUp(evt.key.code);
 			printf("button released!\n");
+			break;
+		case Event::MouseMoved:
+			//Vector2f mousePosition(evt.mouseMove.x, evt.mouseMove.y);
+			Input::getInstance().setMousePosition(Vector2i(evt.mouseMove.x, evt.mouseMove.y));
+			break;
+		default:
+			break;
 		}
 	}
 }

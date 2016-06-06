@@ -18,3 +18,13 @@ bool Input::getKeyState(int keyCode)
 {
 	return keys[keyCode];
 }
+
+void Input::setMousePosition(Vector2i newPosition)
+{
+	mousePosition = newPosition;
+}
+
+Vector2i Input::getMousePosition()
+{
+	return mousePosition;
+}
